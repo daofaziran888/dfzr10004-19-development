@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/audit", tags=["采集审计日志"])
 service = AuditService()
 
 LIST_FIELDS = ["记录编号", "操作类型", "采集计划", "执行人", "执行时间", "结果摘要", "变更内容", "复核状态"]
-STATUSES = ["已记录", "已复核", "已归档"]
+STATUSES = ["已记录", "已复核", "待归档", "已归档"]
 
 
 @router.get("", response_model=PageResult[dict])
@@ -46,6 +46,15 @@ def create_entry(payload: EntryPayload) -> ActionResult:
     if missing:
         return ActionResult(ok=False, message=f"缺少必填字段：{'、'.join(missing)}")
     return ActionResult(ok=True, message="审计记录已登记", entry=entry)
+
+
+@router.post("/import")
+def import_entries(payload: EntryPayload) -> dict[str, Any]:
+    """从导入文件读取审计清单：按记录编号去重，逐条说明新增与跳过原因。"""
+    items = payload.values.get("items")
+    if not isinstance(items, list):
+        return {"ok": False, "message": "导入内容缺少 items 数组，请上传审计清单 JSON 文件"}
+    return service.import_entries(items)
 
 
 @router.post("/{entry_id}/actions", response_model=ActionResult)

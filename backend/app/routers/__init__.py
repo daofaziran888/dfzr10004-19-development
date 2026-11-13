@@ -16,6 +16,7 @@ from app.routers import audit as router_audit
 from app.routers import compliance as router_compliance
 from app.routers import proxy as router_proxy
 from app.routers import storage as router_storage
+from app.routers import retention as router_retention
 from app.routers import alert as router_alert
 from app.routers import report as router_report
 from app.routers import throttle as router_throttle
@@ -23,4 +24,4 @@ from app.routers import tag as router_tag
 from app.routers import version as router_version
 from app.routers import sandbox as router_sandbox
 
-ROUTERS = [router_taskplan, router_verify, router_pipeline, router_transform, router_dedup, router_retry, router_audit, router_compliance, router_proxy, router_storage, router_alert, router_report, router_throttle, router_tag, router_version, router_sandbox]
+ROUTERS = [router_taskplan, router_verify, router_pipeline, router_transform, router_dedup, router_retry, router_audit, router_compliance, router_proxy, router_storage, router_retention, router_alert, router_report, router_throttle, router_tag, router_version, router_sandbox]

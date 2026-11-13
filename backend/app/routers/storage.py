@@ -48,6 +48,14 @@ def create_entry(payload: EntryPayload) -> ActionResult:
     return ActionResult(ok=True, message="存储配置已登记", entry=entry)
 
 
+@router.post("/import-policy")
+def import_policy(payload: EntryPayload) -> dict[str, Any]:
+    """粘贴导入保留策略包：配置已存在时先返回逐字段差异，确认（confirm=true）后才落库。"""
+    confirm = bool(payload.values.get("confirm"))
+    values = {key: value for key, value in payload.values.items() if key != "confirm"}
+    return service.import_policy(values, confirm)
+
+
 @router.post("/{entry_id}/actions", response_model=ActionResult)
 def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     """对单条存储配置执行提交校验、启用配置、停用配置；不允许的动作会被拦下并说明原因。"""
